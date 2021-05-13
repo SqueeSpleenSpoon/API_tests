@@ -44,15 +44,15 @@ namespace API_tests
                 { "password", password }
             };
 
-            request.AddHeader("content-type", "aplication/json");
+            request.AddHeader("content-type", "application/json");
             request.AddHeader("authorization", token);
             request.AddJsonBody(newEmailModel);
             request.RequestFormat = DataFormat.Json;
 
             var response = client.Execute(request);
-            var changeEmailResponse = JsonConvert.DeserializeObject<ChangeEmailResponse>(response.Content);
+            var changedEmailResponse = JsonConvert.DeserializeObject<ChangeEmailResponse>(response.Content);
 
-            return changeEmailResponse.Email;
+            return changedEmailResponse.Email;
         }
 
         public static string SendRequestChangePhoneNumberPost(string password, string newPhone, string token)
@@ -65,15 +65,76 @@ namespace API_tests
                 { "password", password }
             };
 
-            request.AddHeader("content-type", "aplication/json");
+            request.AddHeader("content-type", "application/json");
             request.AddHeader("authorization", token);
             request.AddJsonBody(newPhoneModel);
             request.RequestFormat = DataFormat.Json;
 
             var response = client.Execute(request);
-            var changePhoneResponse = JsonConvert.DeserializeObject<ChangePhoneResponse>(response.Content);
+            var changedPhoneResponse = JsonConvert.DeserializeObject<ChangePhoneResponse>(response.Content);
 
-            return changePhoneResponse.Phone;
+            return changedPhoneResponse.Phone;
+        }
+
+        public static string SendRequestChangeFirstNamePatch(string newFirstName, string token)
+        {
+            var client = new RestClient("https://api.newbookmodels.com/api/v1/client/self/");
+            var request = new RestRequest(Method.PATCH);
+            var newFirsNameModel = new Dictionary<string, string>
+            {
+                { "first_name", newFirstName }
+            };
+
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("authorization", token);
+            request.AddJsonBody(newFirsNameModel);
+            request.RequestFormat = DataFormat.Json;
+
+            var response = client.Execute(request);
+            var changedFirstNameResponse = JsonConvert.DeserializeObject<ChangeFirstNameResponse>(response.Content);
+
+            return changedFirstNameResponse.FirstName;
+        }
+
+        public static string SendRequestChangeLastNamePatch(string newSecondName, string token)
+        {
+            var client = new RestClient("https://api.newbookmodels.com/api/v1/client/profile/");
+            var request = new RestRequest(Method.PATCH);
+            var newLastNameModel = new Dictionary<string, string>
+            {
+                { "last_name", newSecondName }
+            };
+
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("authorization", token);
+            request.AddJsonBody(newLastNameModel);
+            request.RequestFormat = DataFormat.Json;
+
+            var response = client.Execute(request);
+            var changedLastNameResponse = JsonConvert.DeserializeObject<ChangeLastNameResponse>(response.Content);
+
+            return changedLastNameResponse.LastName;
+        }
+
+        public static string SendRequestChangePasswordPost(string oldPassword, string newPassword, string token)
+        {
+            var client = new RestClient("https://api.newbookmodels.com/api/v1/client/profile/");
+            var request = new RestRequest(Method.POST);
+            var newPasswordModel = new Dictionary<string, string>
+            {
+                { "old_password", oldPassword },
+                { "new_password", newPassword }
+            };
+
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("authorization", token);
+            request.AddJsonBody(newPasswordModel);
+            request.RequestFormat = DataFormat.Json;
+
+            var response = client.Execute(request);
+            var changedPasswordResponse = JsonConvert.DeserializeObject<ChangePasswordResponse>(response.Content);
+
+            return changedPasswordResponse.Token;
         }
     }
 }

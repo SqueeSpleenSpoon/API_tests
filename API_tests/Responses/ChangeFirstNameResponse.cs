@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace API_tests.Responses
 {
-    class ChangePhoneResponse
+    class ChangeFirstNameResponse
     {
-        [JsonProperty("phone_number")]
-        public string Phone { get; set; }
+        [JsonProperty("first_name")]
+        public string FirstName { get; set; }
     }
 }
