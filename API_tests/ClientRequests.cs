@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using API_tests.Responses;
+using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace API_tests
                     { "email" , $"its{DateTime.Now:ddyyyymmHHssmm}@gmail.com" },
                     { "first_name" , "Petter" },
                     { "last_name" ,"Parker" },
-                    { "password" ,"123qweQWE"},
+                    { "password" ,"123qweQWE!"},
                     { "phone_number" , "3453453454"}
                 };
             request.AddHeader("content-type", "application/json");
@@ -52,6 +53,27 @@ namespace API_tests
             var changeEmailResponse = JsonConvert.DeserializeObject<ChangeEmailResponse>(response.Content);
 
             return changeEmailResponse.Email;
+        }
+
+        public static string SendRequestChangePhoneNumberPost(string password, string newPhone, string token)
+        {
+            var client = new RestClient("https://api.newbookmodels.com/api/v1/client/change_phone/");
+            var request = new RestRequest(Method.POST);
+            var newPhoneModel = new Dictionary<string, string>
+            {
+                { "phone_number", newPhone },
+                { "password", password }
+            };
+
+            request.AddHeader("content-type", "aplication/json");
+            request.AddHeader("authorization", token);
+            request.AddJsonBody(newPhoneModel);
+            request.RequestFormat = DataFormat.Json;
+
+            var response = client.Execute(request);
+            var changePhoneResponse = JsonConvert.DeserializeObject<ChangePhoneResponse>(response.Content);
+
+            return changePhoneResponse.Phone;
         }
     }
 }
