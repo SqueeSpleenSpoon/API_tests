@@ -1,4 +1,5 @@
-﻿using API_tests.Responses;
+﻿using API_tests.Models;
+using API_tests.Responses;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
@@ -96,13 +97,13 @@ namespace API_tests
             return changedFirstNameResponse.FirstName;
         }
 
-        public static string SendRequestChangeLastNamePatch(string newSecondName, string token)
+        public static string SendRequestChangeLastNamePatch(string newLastName, string token)
         {
-            var client = new RestClient("https://api.newbookmodels.com/api/v1/client/profile/");
+            var client = new RestClient("https://api.newbookmodels.com/api/v1/client/self/");
             var request = new RestRequest(Method.PATCH);
             var newLastNameModel = new Dictionary<string, string>
             {
-                { "last_name", newSecondName }
+                { "last_name", newLastName }
             };
 
             request.AddHeader("content-type", "application/json");
@@ -118,7 +119,7 @@ namespace API_tests
 
         public static string SendRequestChangePasswordPost(string oldPassword, string newPassword, string token)
         {
-            var client = new RestClient("https://api.newbookmodels.com/api/v1/client/profile/");
+            var client = new RestClient("https://api.newbookmodels.com/api/v1/password/change/");
             var request = new RestRequest(Method.POST);
             var newPasswordModel = new Dictionary<string, string>
             {
@@ -132,9 +133,139 @@ namespace API_tests
             request.RequestFormat = DataFormat.Json;
 
             var response = client.Execute(request);
-            var changedPasswordResponse = JsonConvert.DeserializeObject<ChangePasswordResponse>(response.Content);
+            var changedPasswordResponse = JsonConvert.DeserializeObject<TokenData>(response.Content);
 
             return changedPasswordResponse.Token;
+        }
+
+        public static string SendRequestSignInPost(string email, string password)
+        {
+            var client = new RestClient("https://api.newbookmodels.com/api/v1/auth/signin/");
+            var request = new RestRequest(Method.POST);
+            var newSignInModel = new Dictionary<string, string>
+            {
+                { "email", email },
+                { "password", password }
+            };
+
+            request.AddHeader("content-type", "application/json");
+            request.AddJsonBody(newSignInModel);
+            request.RequestFormat = DataFormat.Json;
+
+            var response = client.Execute(request);
+            var token = JsonConvert.DeserializeObject<ResponseSignInModel>(response.Content).TokenData.Token;
+
+            return token;
+        }
+
+        public static string SendRequestChangeIndustryPatch(string industry, string token)
+        {
+            var client = new RestClient("https://api.newbookmodels.com/api/v1/client/profile/");
+            var request = new RestRequest(Method.PATCH);
+            var newIndustryModel = new Dictionary<string, string>
+            {               
+                { "industry", industry},
+                { "location_latitude", "100"},
+                { "location_longitude", "-74.1007318"}
+            };
+
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("authorization", token);
+            request.AddJsonBody(newIndustryModel);
+            request.RequestFormat = DataFormat.Json;
+
+            var response = client.Execute(request);
+            var changedIndustryResponse = JsonConvert.DeserializeObject<GeneralModel>(response.Content);
+
+            return changedIndustryResponse.Industry;
+        }
+
+        public static string SendRequestChangeCompanyAddressPatch(string address, string token)
+        {
+            var client = new RestClient("https://api.newbookmodels.com/api/v1/client/profile/");
+            var request = new RestRequest(Method.PATCH);
+            var newAddressModel = new Dictionary<string, string>
+            {
+                { "company_address", address},
+                { "location_latitude", "100"},
+                { "location_longitude", "-74.1007318"}
+            };
+
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("authorization", token);
+            request.AddJsonBody(newAddressModel);
+            request.RequestFormat = DataFormat.Json;
+
+            var response = client.Execute(request);
+            var changedAddressResponse = JsonConvert.DeserializeObject<GeneralModel>(response.Content);
+
+            return changedAddressResponse.CompanyAddress;
+        }
+
+        public static string SendRequestChangeCompanyDescriptionPatch(string description, string token)
+        {
+            var client = new RestClient("https://api.newbookmodels.com/api/v1/client/profile/");
+            var request = new RestRequest(Method.PATCH);
+            var newDescriptionModel = new Dictionary<string, string>
+            {
+                { "company_description", description},
+                { "location_latitude", "100"},
+                { "location_longitude", "-74.1007318"}
+            };
+
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("authorization", token);
+            request.AddJsonBody(newDescriptionModel);
+            request.RequestFormat = DataFormat.Json;
+
+            var response = client.Execute(request);
+            var changedDescriptionResponse = JsonConvert.DeserializeObject<GeneralModel>(response.Content);
+
+            return changedDescriptionResponse.CompanyDescription.ToString();
+        }
+
+        public static string SendRequestChangeCompanyNamePatch(string name, string token)
+        {
+            var client = new RestClient("https://api.newbookmodels.com/api/v1/client/profile/");
+            var request = new RestRequest(Method.PATCH);
+            var newNameModel = new Dictionary<string, string>
+            {
+                { "company_name", name},
+                { "location_latitude", "100"},
+                { "location_longitude", "-74.1007318"}
+            };
+
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("authorization", token);
+            request.AddJsonBody(newNameModel);
+            request.RequestFormat = DataFormat.Json;
+
+            var response = client.Execute(request);
+            var changedNameResponse = JsonConvert.DeserializeObject<GeneralModel>(response.Content);
+
+            return changedNameResponse.CompanyName.ToString();
+        }
+
+        public static string SendRequestChangeCompanyWebsitePatch(string website, string token)
+        {
+            var client = new RestClient("https://api.newbookmodels.com/api/v1/client/profile/");
+            var request = new RestRequest(Method.PATCH);
+            var newWebsiteModel = new Dictionary<string, string>
+            {
+                { "company_website", website},
+                { "location_latitude", "100"},
+                { "location_longitude", "-74.1007318"}
+            };
+
+            request.AddHeader("content-type", "application/json");
+            request.AddHeader("authorization", token);
+            request.AddJsonBody(newWebsiteModel);
+            request.RequestFormat = DataFormat.Json;
+
+            var response = client.Execute(request);
+            var changedWebsiteResponse = JsonConvert.DeserializeObject<GeneralModel>(response.Content);
+
+            return changedWebsiteResponse.CompanyWebsite.ToString();
         }
     }
 }
