@@ -105,5 +105,15 @@ namespace API_tests
 
             Assert.AreEqual("https://json2csharp.com/", companyName);
         }
+
+        [Test]
+        public void ChangeAvatarWithApi()
+        {
+            var user = ClientRequests.CreateUserViaApi();
+
+            var avatarId = ClientRequests.SendRequestChangeAvatarPost(user.TokenData.Token);
+
+            Assert.AreEqual("4449e47e-3b24-458d-982d-9f37d01dda3e", avatarId);
+        }
     }
 }

@@ -267,5 +267,35 @@ namespace API_tests
 
             return changedWebsiteResponse.CompanyWebsite.ToString();
         }
+        
+        public static string SendRequestChangeAvatarPost(string token)
+        {
+            var client = new RestClient("https://api.newbookmodels.com/api/images/upload/");
+
+            var request = new RestRequest(Method.POST);
+
+            request.AddHeader("authorization", token);
+            request.AddHeader("Content-Disposition", "form-data; name=\"file\"; filename=\"avatar.jpeg\"");
+            request.AddHeader("Content-Type", "image/jpeg");
+            request.AddFile("file", "C:\\Users\\CKOT4\\Desktop\\avatar.jpeg");
+            //request.AddParameter("image/png", @"C:\Users\CKOT4\Desktop\EOM.png", ParameterType.RequestBody);
+            request.RequestFormat = DataFormat.Json;
+
+            var response = client.Execute(request);
+
+            /* var client = new RestClient("https://api.newbookmodels.com/api/images/upload/");
+             client.Timeout = -1;
+             var request = new RestRequest(Method.POST);
+             request.AddHeader("Content-Disposition", "form-data; name=\"file\"; filename=\"avatar.jpeg\"");
+             request.AddHeader("content-type", "image/png");
+             request.AddHeader("authorization", token);
+             request.AddParameter("image/jpeg", @"‪C:\Users\CKOT4\Desktop\avatar.jpeg", ParameterType.RequestBody);
+             IRestResponse response = client.Execute(request);
+
+ */
+            var changedAvatarResponse = JsonConvert.DeserializeObject<Image>(response.Content);
+
+            return changedAvatarResponse.Id;
+        }
     }
 }
